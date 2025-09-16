@@ -20,6 +20,7 @@ Pacman agents (in searchAgents.py).
 from abc import ABC, abstractmethod
 
 import util
+from util import Stack
 
 
 class SearchProblem(ABC):
@@ -95,7 +96,10 @@ def depthFirstSearch(problem):
     print("Start's successors:", problem.getSuccessors(problem.getStartState()))
     """
     "*** YOUR CODE HERE ***"
-    util.raiseNotDefined()
+    visitados = []
+    pila = Stack()
+
+    start = problem.getStartState()
 
 
 def breadthFirstSearch(problem):
