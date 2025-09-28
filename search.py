@@ -100,6 +100,17 @@ def depthFirstSearch(problem):
     pila = Stack()
 
     start = problem.getStartState()
+    pila.push((start, [])) # En el array se guardará el path (las acciones) hasta el nodo
+    while not pila.isEmpty():
+        nodo, path = pila.pop()
+        visitados.append(nodo)
+        if problem.isGoalState(nodo):
+            return path
+        else:
+            for sig_nodo, accion, coste in problem.getSuccessors(nodo):
+                if sig_nodo not in visitados:
+                    pila.push((sig_nodo, path + [accion]))
+    return []
 
 
 def breadthFirstSearch(problem):
