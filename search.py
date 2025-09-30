@@ -19,7 +19,7 @@ Pacman agents (in searchAgents.py).
 from abc import ABC, abstractmethod
 
 import util
-from util import Stack, Queue, PriorityQueue
+from util import Stack, Queue, PriorityQueue, PriorityQueueWithFunction, manhattanDistance
 
 
 class SearchProblem(ABC):
@@ -163,7 +163,23 @@ def nullHeuristic(state, problem=None):
 def aStarSearch(problem, heuristic=nullHeuristic):
     """Search the node that has the lowest combined cost and heuristic first."""
     "*** YOUR CODE HERE ***"
-    util.raiseNotDefined()
+    visitados = []
+    cola = PriorityQueue()
+    start = problem.getStartState()
+    cola.push((start, [], 0), 0)
+    while not cola.isEmpty():
+        nodo, path, coste_actual = cola.pop()
+        visitados.append(nodo)
+        if problem.isGoalState(nodo):
+            return path
+        else:
+            for sig_nodo, accion, coste in problem.getSuccessors(nodo):
+                nuevo_peso = coste + coste_actual + heuristic(nodo, problem)
+                if sig_nodo not in visitados:
+                    cola.push((sig_nodo, path + [accion], nuevo_peso), nuevo_peso)
+
+    return []
+
 
 
 # Abbreviations
