@@ -19,7 +19,7 @@ Pacman agents (in searchAgents.py).
 from abc import ABC, abstractmethod
 
 import util
-from util import Stack, Queue
+from util import Stack, Queue, PriorityQueue
 
 
 class SearchProblem(ABC):
@@ -120,12 +120,12 @@ def breadthFirstSearch(problem):
     start = problem.getStartState()
     cola.push((start, []))
     while not cola.isEmpty():
-        posicion, path = cola.pop()
-        visitados.append(posicion)
-        if problem.isGoalState(posicion):
+        nodo, path = cola.pop()
+        visitados.append(nodo)
+        if problem.isGoalState(nodo):
             return path
         else:
-            for sig_posicion, accion, coste in problem.getSuccessors(posicion):
+            for sig_posicion, accion, coste in problem.getSuccessors(nodo):
                 if sig_posicion not in visitados:
                     cola.push((sig_posicion, path + [accion]))
 
@@ -134,7 +134,22 @@ def breadthFirstSearch(problem):
 def uniformCostSearch(problem):
     """Search the node of least total cost first."""
     "*** YOUR CODE HERE ***"
-    util.raiseNotDefined()
+    visitados = []
+    cola = PriorityQueue()
+    start = problem.getStartState()
+    cola.push((start, [], 0), 0)
+    while not cola.isEmpty():
+        nodo, path, coste_actual = cola.pop()
+        visitados.append(nodo)
+        if problem.isGoalState(nodo):
+            return path
+        else:
+            for sig_nodo, accion, coste in problem.getSuccessors(nodo):
+                nuevo_coste = coste + coste_actual
+                if sig_nodo not in visitados:
+                    cola.push((sig_nodo, path + [accion], nuevo_coste), nuevo_coste)
+
+    return []
 
 
 def nullHeuristic(state, problem=None):
