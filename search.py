@@ -16,11 +16,10 @@
 In search.py, you will implement generic search algorithms which are called by
 Pacman agents (in searchAgents.py).
 """
-
 from abc import ABC, abstractmethod
 
 import util
-from util import Stack
+from util import Stack, Queue
 
 
 class SearchProblem(ABC):
@@ -116,8 +115,21 @@ def depthFirstSearch(problem):
 def breadthFirstSearch(problem):
     """Search the shallowest nodes in the search tree first."""
     "*** YOUR CODE HERE ***"
-    util.raiseNotDefined()
+    visitados = []
+    cola = Queue()
+    start = problem.getStartState()
+    cola.push((start, []))
+    while not cola.isEmpty():
+        posicion, path = cola.pop()
+        visitados.append(posicion)
+        if problem.isGoalState(posicion):
+            return path
+        else:
+            for sig_posicion, accion, coste in problem.getSuccessors(posicion):
+                if sig_posicion not in visitados:
+                    cola.push((sig_posicion, path + [accion]))
 
+    return []
 
 def uniformCostSearch(problem):
     """Search the node of least total cost first."""
